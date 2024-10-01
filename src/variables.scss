@@ -1,0 +1,7 @@
+//  Déclaration des couleurs
+
+$beige : #FFF1C0;
+$bleu: #0c4563;
+$beige-grisé: rgba($beige, 0.92);
+$bleu-atténué: lighten($bleu, 20%);
+$beige-lighter: lighten($beige, 8%);

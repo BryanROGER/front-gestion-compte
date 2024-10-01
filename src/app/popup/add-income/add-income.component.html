@@ -1,0 +1,33 @@
+<h1 mat-dialog-title>Ajout d'un nouveau revenu</h1>
+
+<form [formGroup]="formAddIncome" (submit)="onFormSubmit()">
+  <div mat-dialog-content>
+    <mat-form-field>
+      <mat-label>Montant</mat-label>
+      <input matInput formControlName="amount">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>User</mat-label>
+      <mat-select formControlName="userId">
+        @for (user of users; track user) {
+          <mat-option [value]="user.id">{{ user.firstname }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Libellé</mat-label>
+      <mat-select formControlName="tagId">
+        @for (tag of tags; track tag) {
+          <mat-option [value]="tag.id">{{ tag.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions>
+
+    <button mat-flat-button type="submit">{{ textButton }}</button>
+    <button mat-flat-button (click)="this.dialogRef.close()">Annuler</button>
+  </div>
+
+</form>
+

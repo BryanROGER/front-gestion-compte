@@ -1,0 +1,32 @@
+<div id="gc-month-summary">
+
+  <app-date-picker></app-date-picker>
+
+  <mat-tab-group dynamicHeight="true">
+    <mat-tab label="Dépenses">
+      <ng-template matTabContent>
+        <app-tableau-recap-mois class="table-month"></app-tableau-recap-mois>
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="Revenus">
+      <ng-template matTabContent>
+        <app-income-table class="table-month"></app-income-table>
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="Balance budget">
+      <ng-template matTabContent>
+        content 3
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="Remboursement">
+      <ng-template matTabContent>
+        content 4
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+
+
+</div>

@@ -1,0 +1,72 @@
+@use '@angular/material' as mat;
+@import "../../variables.scss";
+
+#gc-month-summary {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 5vh;
+  margin: 3% 6% 0 6%;
+}
+
+///////////////// début gestion tabs ////////////////
+.mat-mdc-tab.mdc-tab {
+  background-color: $bleu;
+  .mdc-tab__text-label {
+    color: $beige;
+  }
+  &.mat-mdc-tab.mdc-tab--active {
+    background-color: $beige;
+    --mdc-tab-indicator-active-indicator-color: $bleu; // Couleur de l'indicateur actif
+
+    .mdc-tab__text-label {
+      color: $bleu;
+    }
+  }
+  &:not(.mdc-tab--active):hover {
+    --mdc-tab-indicator-active-indicator-color: $beige-grisé; // Couleur de l'indicateur inactif au hover
+    .mdc-tab__text-label {
+      color: $bleu-atténué; // Couleur du texte au hover pour les onglets inactifs
+    }
+  }
+  &:not(.mdc-tab--active):hover .mdc-tab-indicator {
+    background-color: $beige-grisé;
+  }
+}
+
+/////////////////// fin gestion tabs ////////////////
+
+
+
+///////////////// début factorisation tables ////////////////
+.button-add{
+  align-self: end;
+}
+
+.table-month{
+  display: flex;
+  flex-direction: column;
+}
+
+.mat-mdc-tab-group{
+  flex: 1;
+}
+
+.mat-mdc-header-row {
+  background: $beige-lighter !important;
+}
+
+.mat-mdc-table{
+  margin: 2% 0;
+}
+
+.mat-mdc-header-cell, .mat-mdc-cell{
+  text-align: center !important;
+}
+
+.gc-table-actions{
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+/////////////////  fin  factorisation tables ////////////////
