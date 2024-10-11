@@ -15,7 +15,7 @@
           {{ user.firstname | firstLetter }}
         </div>
 
-         Menu Principal pour chaque utilisateur
+<!--         Menu Principal pour chaque utilisateur-->
         <mat-menu #menu="matMenu" class="gc-centered-menu" style="align-self: center">
           <div (mouseleave)="closeMenu(menuTriggers.toArray()[idx])">
             <button mat-menu-item [routerLink]="['/mon-profil/:id', {id: user.id}]">Mon profil</button>
