@@ -12,7 +12,7 @@ export class TagService {
   constructor(private http: HttpClient) { }
 
   getAllTags(){
-    return this.http.get(this.apiURL + "tag/all");
+    return this.http.get(this.apiURL + "api/v1/tags");
   }
 
 

@@ -15,15 +15,15 @@ export class SpendService {
   saveSpend(spend: Spend){
     const body = JSON.stringify(spend)
     const headers = new HttpHeaders({'Content-Type': 'application/json'});
-    return this.http.put(this.apiURL+"spend/add",body, { headers: headers })
+    return this.http.put(this.apiURL+"api/v1/spends/add",body, { headers: headers })
   }
 
   deleteSpend(id: string){
-    return this.http.delete(this.apiURL+`spend/delete/${id}`)
+    return this.http.delete(this.apiURL+`api/v1/spends/delete/${id}`)
   }
 
   getSpendInMonth(month: string, year: string){
     const body = { month: `${month}`, year:`${year}` }; // Créez un objet JSON avec les paramètres
-    return this.http.post(this.apiURL+"spend/all-in-a-month", body); // Faites l'appel POST avec le corps JSON
+    return this.http.post(this.apiURL+"api/v1/spends/all-in-a-month", body); // Faites l'appel POST avec le corps JSON
   }
 }

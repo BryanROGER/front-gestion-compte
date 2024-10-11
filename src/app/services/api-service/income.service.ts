@@ -16,16 +16,16 @@ export class IncomeService {
   saveIncome(income: Income){
     const body = JSON.stringify(income)
     const headers = new HttpHeaders({'Content-Type': 'application/json'});
-    return this.http.put(this.apiURL+"income/add",body, { headers: headers })
+    return this.http.put(this.apiURL+"api/v1/incomes/add",body, { headers: headers })
   }
 
 
   deleteSpend(id: string){
-    return this.http.delete(this.apiURL+`income/delete/${id}`)
+    return this.http.delete(this.apiURL+`api/v1/incomes/delete/${id}`)
   }
 
   getIncomeInMonth(month: string, year: string) {
     const body = { month: `${month}`, year:`${year}` };
-    return this.http.post(this.apiURL+"income/all-in-a-month", body);
+    return this.http.post(this.apiURL+"api/v1/incomes/all-in-a-month", body);
   }
 }

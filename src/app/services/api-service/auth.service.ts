@@ -1,6 +1,6 @@
 import {inject, Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, tap} from "rxjs";
-import {HttpBackend, HttpClient} from "@angular/common/http";
+import { HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment.development";
 
 @Injectable({
@@ -20,10 +20,9 @@ export class AuthService {
     email: string,
     password: string,
   }): Observable<any> {
-    return this.http.post(this.apiURL+"user/api/v1/login",user).pipe(
+    return this.http.post(this.apiURL+"api/v1/auth/login",user).pipe(
       tap((response:any)=> {
         this.doLoginUser(user.email, response.accessToken)
-        console.log(response.accessToken)
       })
     )
   }
