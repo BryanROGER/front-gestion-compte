@@ -53,7 +53,7 @@
         @if (idSpendModified === spend.id) {
           <select [(ngModel)]="spend.payer.firstname">
             @for (user of users; track user) {
-              <option [ngValue]="user.firstname" [selected]="spend.payer.id == user.id">
+              <option [ngValue]="user.firstname" [selected]="spend.payer.id == user.email">
                 {{ user.firstname }}
               </option>
             }
@@ -74,7 +74,7 @@
           <div>
             @for (user of users; track user) {
               <label>{{ user.firstname }}<input [value]="user"
-                                                [checked]="recipientIds.includes(user.id)"
+                                                [checked]="recipientIds.includes(user.email)"
                                                 (change)="updateRecipientsSelection(user)" type="checkbox"></label>
             }
           </div>

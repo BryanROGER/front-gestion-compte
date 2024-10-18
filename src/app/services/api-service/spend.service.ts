@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {environment} from '../../../environments/environment.development';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Spend} from "../../../models/Spend";
+import {HouseholdService} from "./household.service";
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ export class SpendService {
 
   apiURL = environment.apiURL
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private householdService: HouseholdService) { }
 
   saveSpend(spend: Spend){
     const body = JSON.stringify(spend)
@@ -23,7 +24,11 @@ export class SpendService {
   }
 
   getSpendInMonth(month: string, year: string){
-    const body = { month: `${month}`, year:`${year}` }; // Créez un objet JSON avec les paramètres
-    return this.http.post(this.apiURL+"api/v1/spends/all-in-a-month", body); // Faites l'appel POST avec le corps JSON
+    let household
+      this.householdService.getHousehold().subscribe(house => {
+        household = house
+      })
+    const body = { month: `${month}`, year:`${year}`, householdID: `${household!.id}` };
+    return this.http.post(this.apiURL+"api/v1/spends/all-in-a-month", body);
   }
 }

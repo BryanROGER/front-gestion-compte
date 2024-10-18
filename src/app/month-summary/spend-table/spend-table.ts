@@ -106,13 +106,13 @@ export class SpendTable implements OnInit {
   }
 
   onDelete(spend : Spend){
-    this.spendService.deleteSpend(spend.id.toString()).subscribe(res => {
+    this.spendService.deleteSpend(spend.id.toString()).subscribe(() => {
         this.updateSpends()
     })
   }
 
   save(spend: Spend) {
-    spend.recipients = this.users.filter(user => this.recipientIds.includes(user.id))
+    spend.recipients = this.users.filter(user => this.recipientIds.includes(user.email))
     this.spendService.saveSpend(spend)
     this.idSpendModified = ""
     this.recipientIds = []
@@ -124,15 +124,15 @@ export class SpendTable implements OnInit {
 
   updateRecipientsSelection(user: User) {
 
-    if (this.recipientIds.includes(user.id)) {
-      this.recipientIds = this.recipientIds.filter(id => id !== user.id);
+    if (this.recipientIds.includes(user.email)) {
+      this.recipientIds = this.recipientIds.filter(id => id !== user.email);
     } else {
-      this.recipientIds.push(user.id);
+      this.recipientIds.push(user.email);
     }
   }
 
   addNewSpend(){
-    this.newSpend.recipients = this.users.filter(user => this.recipientIds.includes(user.id))
+    this.newSpend.recipients = this.users.filter(user => this.recipientIds.includes(user.email))
     this.spendService.saveSpend(this.newSpend).subscribe(response => this.updateSpends())
     this.newSpend = new Spend()
     this.recipientIds = []
@@ -144,7 +144,7 @@ export class SpendTable implements OnInit {
   }
 
   protected readonly User = User;
-  protected readonly String = String;
+
 
   addData(spend :Spend|null) {
     const dialogRef = this.dialog.open(AddSpendComponent,

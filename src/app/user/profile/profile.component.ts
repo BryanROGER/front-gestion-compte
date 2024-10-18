@@ -19,8 +19,8 @@ export class ProfileComponent implements OnInit {
     this.route.params
       .pipe(
         switchMap(params => {
-          const idUser = params['id'];
-          return this.userService.GetUserById(idUser);
+          const idUser = params['email'];
+          return this.userService.getUserByEmail(idUser);
         })
       )
       .subscribe({

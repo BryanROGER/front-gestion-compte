@@ -10,7 +10,7 @@
       <mat-label>User</mat-label>
       <mat-select formControlName="userId">
         @for (user of users; track user) {
-          <mat-option [value]="user.id">{{ user.firstname }}</mat-option>
+          <mat-option [value]="user.email">{{ user.firstname }}</mat-option>
         }
       </mat-select>
     </mat-form-field>

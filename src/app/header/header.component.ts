@@ -10,6 +10,8 @@ import {MatIcon} from "@angular/material/icon";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatToolbar} from "@angular/material/toolbar";
 import {CdkConnectedOverlay, CdkOverlayOrigin} from "@angular/cdk/overlay";
+import {Household} from "../../models/household";
+import {HouseholdService} from "../services/api-service/household.service";
 
 @Component({
   selector: 'app-header',
@@ -35,6 +37,7 @@ import {CdkConnectedOverlay, CdkOverlayOrigin} from "@angular/cdk/overlay";
 })
 export class HeaderComponent implements OnInit {
 
+  household: Household|null = null;
 
   ngOnInit() {
     this.userService.getAllUsers().subscribe({
@@ -43,10 +46,16 @@ export class HeaderComponent implements OnInit {
         this.cdr.detectChanges();
       }
     })
-
+    this.householdService.household$.subscribe({
+      next: (household: Household | null) => {
+        this.household = household;
+      }
+    })
   }
 
-  constructor(private userService: UserService, private cdr: ChangeDetectorRef) {
+
+
+  constructor(private userService: UserService, private cdr: ChangeDetectorRef, private householdService : HouseholdService) {
   }
 
   users!: User[];

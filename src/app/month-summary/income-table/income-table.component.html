@@ -17,7 +17,7 @@
       @if (idIncomeModified === income.id) {
         <select [(ngModel)]="income.user.firstname">
           @for (user of users; track user) {
-            <option [ngValue]="user.firstname" [selected]="income.user.id == user.id">
+            <option [ngValue]="user.firstname" [selected]="income.user.id == user.email">
               {{ user.firstname }}
             </option>
           }

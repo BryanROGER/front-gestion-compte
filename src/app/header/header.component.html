@@ -15,10 +15,10 @@
           {{ user.firstname | firstLetter }}
         </div>
 
-<!--         Menu Principal pour chaque utilisateur-->
+        <!--         Menu Principal pour chaque utilisateur-->
         <mat-menu #menu="matMenu" class="gc-centered-menu" style="align-self: center">
           <div (mouseleave)="closeMenu(menuTriggers.toArray()[idx])">
-            <button mat-menu-item [routerLink]="['/mon-profil/:id', {id: user.id}]">Mon profil</button>
+            <button mat-menu-item [routerLink]="['/mon-profil/:email', {id: user.email}]">Mon profil</button>
             <button mat-menu-item>Bilan Annuel</button>
             <button mat-menu-item>Bilan total</button>
           </div>
@@ -28,9 +28,11 @@
   </div>
 
   <div class="gc-toolbar-right">
-    <span>
-        <i class="fa-solid fa-house"></i>
-    </span>
+    @if (household != null) {
+      <span>
+        <i class="fa-solid fa-house" [routerLink]="['/parametre-foyer/:name', {name: household.name}]" ></i>
+      </span>
+    }
   </div>
 </mat-toolbar>
 

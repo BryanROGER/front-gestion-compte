@@ -15,8 +15,12 @@ export class UserService {
     return this.http.get(this.apiURL + "api/v1/users");
   }
 
-  GetUserById(id: string | null){
-    return this.http.get(this.apiURL+`api/v1/users/${id}`)
+  getUserHouses(){
+    return this.http.get(this.apiURL + "api/v1/users/houses");
+  }
+
+  getUserByEmail(email: string){
+    return this.http.get(this.apiURL+`api/v1/users/${email}`)
   }
 
 

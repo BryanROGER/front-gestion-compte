@@ -77,7 +77,7 @@ export class AddIncomeComponent implements OnInit {
   initializeForm() {
     this.formAddIncome = this.formBuilder.group({
       amount: [this.newIncome.amount, [Validators.required, Validators.min(0)]],
-      userId: [this.newIncome.user ? this.newIncome.user.id : '', Validators.required], // Utiliser l'ID pour lier
+      userId: [this.newIncome.user ? this.newIncome.user.email: '', Validators.required], // Utiliser l'ID pour lier
       tagId: [this.newIncome.tag ? this.newIncome.tag.id : '', Validators.required],    // Utiliser l'ID pour lier
       date: [this.newIncome.date]
     });
@@ -87,9 +87,9 @@ export class AddIncomeComponent implements OnInit {
   onFormSubmit() {
     console.log("in onFormSubmit")
     console.log(this.formAddIncome.value)
-    console.log(this.users.find(u => u.id === this.formAddIncome.value.user))
+    console.log(this.users.find(u => u.email === this.formAddIncome.value.user))
 
-    let userFind = this.users.find(u => u.id === this.formAddIncome.value.userId)
+    let userFind = this.users.find(u => u.email === this.formAddIncome.value.userId)
     let tagFound = this.tags.find(u => u.id === this.formAddIncome.getRawValue().tagId)
     if (userFind != undefined && tagFound != undefined) {
 

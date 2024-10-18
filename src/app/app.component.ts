@@ -21,6 +21,7 @@ export class AppComponent {
     this.authService.login({
       email: "bryan@gmail.com",
       password: "test"
-    })
+    }).subscribe(auth => {
+      console.log(auth)})
   }
 }

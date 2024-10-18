@@ -66,7 +66,7 @@ export class AddSpendComponent implements OnInit {
     this.textButton = this.newSpend.id ? "Mettre à jour dépense" : "Ajouter nouvelle dépense"
     if (this.newSpend.recipients){
       this.newSpend.recipients.forEach(user =>{
-        this.defaultRecipients.push(user.id)
+        this.defaultRecipients.push(user.email)
       })
     }
     console.log(this.defaultRecipients)
@@ -89,9 +89,9 @@ export class AddSpendComponent implements OnInit {
 
     if(this.formAddSpend.valid){
 
-      let payerFind = this.users.find(u=> u.id === this.formAddSpend.getRawValue().payerId) || new User()
+      let payerFind = this.users.find(u=> u.email === this.formAddSpend.getRawValue().payerId) || new User()
       let tagFound = this.tags.find(t=> t.id === this.formAddSpend.getRawValue().tagId) || new Tag()
-      let recipientsFound = this.users.filter(u=> this.formAddSpend.getRawValue().recipientsIds.includes(u.id))
+      let recipientsFound = this.users.filter(u=> this.formAddSpend.getRawValue().recipientsIds.includes(u.email))
 
       this.newSpend.name = this.formAddSpend.value.name!
       this.newSpend.amount = this.formAddSpend.value.amount!
@@ -113,7 +113,7 @@ export class AddSpendComponent implements OnInit {
     this.formAddSpend = this.formBuilder.group({
       name: [this.newSpend.name],
       amount: [this.newSpend.amount],
-      payerId : [this.newSpend.payer ?  this.newSpend.payer.id : ""],
+      payerId : [this.newSpend.payer ?  this.newSpend.payer.email : ""],
       recipientsIds : [this.defaultRecipients],
       tagId : [this.newSpend.tag ? this.newSpend.tag.id : "" ]
     })

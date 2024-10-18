@@ -2,6 +2,7 @@ import {inject, Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, tap} from "rxjs";
 import { HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment.development";
+import {jwtDecode} from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +23,8 @@ export class AuthService {
   }): Observable<any> {
     return this.http.post(this.apiURL+"api/v1/auth/login",user).pipe(
       tap((response:any)=> {
+        console.log("in login")
+        console.log(response)
         this.doLoginUser(user.email, response.accessToken)
       })
     )
@@ -36,6 +39,21 @@ export class AuthService {
 
   private storeJwtToken(jwt: any) {
     localStorage.setItem(this.JWT_TOKEN, jwt)
+    console.log("in set item")
+  }
+
+  getDecodedToken(token: string): any {
+    try {
+      return jwtDecode(token);
+    } catch (Error) {
+      return null;
+    }
+  }
+
+  // Récupérer le 'sub' du token
+  getSubjectFromToken(token: string): string | null {
+    const decodedToken = this.getDecodedToken(token);
+    return decodedToken ? decodedToken.sub : null;
   }
 
   logout(){
