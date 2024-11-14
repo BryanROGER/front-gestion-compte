@@ -1,0 +1,13 @@
+@if (user != null) {
+
+  @for (household of user.households; track household) {
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>{{ household.name }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-actions>
+        <button mat-button (click)="goToHousehold(household)">Entrer</button>
+      </mat-card-actions>
+    </mat-card>
+  }
+}
