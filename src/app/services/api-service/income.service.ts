@@ -13,15 +13,21 @@ export class IncomeService {
   apiURL = environment.apiURL
 
 
-  saveIncome(income: Income){
+  updateIncome(income: Income, id :string){
     const body = JSON.stringify(income)
     const headers = new HttpHeaders({'Content-Type': 'application/json'});
-    return this.http.put(this.apiURL+"api/v1/incomes/add",body, { headers: headers })
+    return this.http.put(this.apiURL+`api/v1/incomes/${id}`,body, { headers: headers })
+  }
+
+  createIncome(income: Income){
+    const body = JSON.stringify(income)
+    const headers = new HttpHeaders({'Content-Type': 'application/json'});
+    return this.http.post(this.apiURL+`api/v1/incomes`,body, { headers: headers })
   }
 
 
   deleteSpend(id: string){
-    return this.http.delete(this.apiURL+`api/v1/incomes/delete/${id}`)
+    return this.http.delete(this.apiURL+`api/v1/incomes/${id}`)
   }
 
   getIncomeInMonth(month: string, year: string) {

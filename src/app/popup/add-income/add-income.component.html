@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>Ajout d'un nouveau revenu</h1>
+<h1 mat-dialog-title>{{textTitle}}</h1>
 
 <form [formGroup]="formAddIncome" (submit)="onFormSubmit()">
   <div mat-dialog-content>
@@ -26,7 +26,7 @@
   <div mat-dialog-actions>
 
     <button mat-flat-button type="submit">{{ textButton }}</button>
-    <button mat-flat-button (click)="this.dialogRef.close()">Annuler</button>
+    <button mat-flat-button type="button" (click)="this.dialogRef.close()">Annuler</button>
   </div>
 
 </form>

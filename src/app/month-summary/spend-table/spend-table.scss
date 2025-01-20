@@ -14,3 +14,77 @@ i{
   margin:auto;
 }
 
+mat-expansion-panel-header{
+  background-color: #f0d4ff;
+
+  mat-panel-title{
+    font-weight: bold;
+    font-size: 1em;
+    flex: 2;
+  }
+
+  mat-panel-description {
+    font-weight: bold;
+    font-size: 1em;
+    flex: 1;
+    text-align: right;
+    padding-right: 1vh;
+  }
+
+  .mat-expansion-panel-header-title, .mat-expansion-panel-header-description {
+    display: block !important;
+  }
+
+}
+
+mat-expansion-panel-header:hover, mat-expansion-panel-header:focus  {
+  background: #f0d4ff !important;
+}
+
+.gc-description-panel-expansion{
+  display: flex;
+  flex-direction: column;
+  margin: 2vh 2vh 2vh 0;
+  gap: 1vh;
+}
+
+.gc-first-description {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, auto);
+  gap: 1rem;
+  text-align: center;
+
+  span {
+    font-weight: bold;
+    font-size: 1.3em;
+  }
+}
+
+.gc-second-description {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, auto);
+  gap: 1rem;
+  text-align: center;
+  align-items: flex-end;
+}
+
+.gc-circle-user {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+.gc-expansion-actions {
+  display: flex;
+  gap: 1vh;
+  align-items: center;
+  justify-content: center;
+}
+
+.button-add{
+  margin: 2vh auto;
+}
+
+

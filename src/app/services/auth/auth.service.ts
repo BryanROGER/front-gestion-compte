@@ -23,9 +23,7 @@ export class AuthService {
   }): Observable<any> {
     return this.http.post(this.apiURL+"api/v1/auth/login",user).pipe(
       tap((response:any)=> {
-        console.log("in login")
-        console.log(response)
-        this.doLoginUser(user.email, response.accessToken)
+        this.doLoginUser(user.email, response.token)
       })
     )
   }
@@ -39,7 +37,6 @@ export class AuthService {
 
   private storeJwtToken(jwt: any) {
     localStorage.setItem(this.JWT_TOKEN, jwt)
-    console.log("in set item")
   }
 
   getDecodedToken(token: string): any {
@@ -60,4 +57,28 @@ export class AuthService {
     localStorage.removeItem(this.JWT_TOKEN);
     this.isAuthenticatedSubject.next(false);
   }
+
+  isLoggedIn(){
+    return !!localStorage.getItem(this.JWT_TOKEN);
+  }
+
+  isTokenExpired(){
+    let jwtToken = localStorage.getItem(this.JWT_TOKEN)
+
+    if(!jwtToken) return true;
+
+    const decodedToken = jwtDecode(jwtToken)
+
+    if(!decodedToken.exp) return true;
+
+    const expirationDate = decodedToken.exp * 1000
+    const now = new Date().getTime()
+
+    return expirationDate < now;
+  }
+
+  refreshJwtToken(){
+    return localStorage.getItem(this.JWT_TOKEN);
+  }
+
 }

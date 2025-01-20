@@ -1,16 +1,16 @@
 import {Component, OnInit} from '@angular/core';
 import {MatCard, MatCardActions, MatCardHeader, MatCardModule} from "@angular/material/card";
+import {Router, RouterLink} from "@angular/router";
 import {MatButton} from "@angular/material/button";
-import {AuthService} from "../services/api-service/auth.service";
-import {UserService} from "../services/api-service/user.service";
-import {User} from "../../models/user";
-import { Router, RouterLink} from "@angular/router";
-import {HouseholdService} from "../services/api-service/household.service";
-import {Household} from "../../models/household";
+import {AuthService} from "../../services/auth/auth.service";
+import {UserService} from "../../services/api-service/user.service";
+import {HouseholdService} from "../../services/api-service/household.service";
+import {User} from "../../../models/user";
+import {Household} from "../../../models/household";
+
+
 
 @Component({
-  selector: 'app-home',
-  standalone: true,
   imports: [
     MatCard,
     MatCardHeader,
@@ -19,8 +19,10 @@ import {Household} from "../../models/household";
     MatCardModule,
     RouterLink
   ],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
+  selector: 'app-home',
+  standalone: true,
+  styleUrl: './home.component.scss',
+  templateUrl: './home.component.html'
 })
 export class HomeComponent implements OnInit {
 
@@ -51,6 +53,6 @@ export class HomeComponent implements OnInit {
   goToHousehold(household: Household) {
     this.householdService.setHousehold(household)
     const encodedName = encodeURIComponent(household.name);  // Encodage du nom
-    this.router.navigate([encodedName]);
+    this.router.navigate(["/foyer/"+encodedName]);
   }
 }

@@ -1,6 +1,13 @@
-<app-header></app-header>
+<div class="main-container">
+  <header class="header">
+    <app-header></app-header>
+  </header>
 
-<router-outlet class="main"></router-outlet>
+  <div class="content-wrapper">
+    <router-outlet></router-outlet>
+  </div>
 
-
-<app-footer></app-footer>
+  <footer class="footer">
+    <app-footer></app-footer>
+  </footer>
+</div>

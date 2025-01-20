@@ -1,32 +1,23 @@
 /* You can add global styles to this file, and also import other style files */
 
-body {
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-}
+
 
 input{
   max-width: 80%;
 }
 
-.container {
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100vh;
-}
-
-main {
-  flex: 1;
-}
-
 p, ul, li {
-  margin: 0 !important;
+  margin: 0 ;
   padding: 0;
 }
 
+.mat-typography h1{
+  font-size: 1.7em;
+  text-align: center;
+  line-height: 1.5em;
+  padding: 2vh 0;
+  margin: 0;
+}
 
 .gc-circle-user {
   border: solid 0.5px;

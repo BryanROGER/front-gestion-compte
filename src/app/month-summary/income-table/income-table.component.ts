@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, computed, OnInit} from '@angular/core';
 import {IncomeService} from "../../services/api-service/income.service";
 import {Income} from "../../../models/Income";
 import {NgStyle} from "@angular/common";
@@ -22,6 +22,13 @@ import {AddIncomeComponent} from "../../popup/add-income/add-income.component";
 import {MatDialog} from "@angular/material/dialog";
 import {NumberFormatterPipe} from "../../pipes/number-formatter.pipe";
 import {DatePickerService} from "../../services/date-picker.service";
+import {
+  MatAccordion,
+  MatExpansionPanel,
+  MatExpansionPanelDescription,
+  MatExpansionPanelHeader, MatExpansionPanelTitle
+} from "@angular/material/expansion";
+import {MatIcon} from "@angular/material/icon";
 
 
 @Component({
@@ -43,7 +50,13 @@ import {DatePickerService} from "../../services/date-picker.service";
     ReactiveFormsModule,
     FormsModule,
     MatButton,
-    NumberFormatterPipe
+    NumberFormatterPipe,
+    MatAccordion,
+    MatExpansionPanel,
+    MatExpansionPanelDescription,
+    MatExpansionPanelHeader,
+    MatExpansionPanelTitle,
+    MatIcon
   ],
   templateUrl: './income-table.component.html',
   styleUrl: './income-table.component.scss'
@@ -60,7 +73,7 @@ export class IncomeTableComponent implements OnInit {
   ngOnInit() {
     this.datePickerService.incomes$.subscribe({
       next: (incomes: Income[]) => {
-        this.incomes = incomes;
+        this.incomes = [...incomes].sort((a, b) => a.order - b.order)
       }
     });
     this.userService.getAllUsers().subscribe({
@@ -77,10 +90,8 @@ export class IncomeTableComponent implements OnInit {
   }
 
   incomes: Income[] = []
-  definedColumns = ['Bénéficiaire', 'Montant', 'Libellé', 'Action']
   users: User[] = []
   tags: Tag[] = []
-  idIncomeModified = ""
 
 
   onEdit(income: Income) {
@@ -88,25 +99,10 @@ export class IncomeTableComponent implements OnInit {
     // this.idIncomeModified = income.id
   }
 
-  redo() {
-    this.idIncomeModified = ""
-  }
-
   onDelete(income: Income) {
     this.incomeService.deleteSpend(income.id).subscribe(() => {
       this.updateIncomes()
     })
-  }
-
-  save(income: Income) {
-    this.incomeService.saveIncome(income).subscribe({
-        next: (response: any) => {
-          this.updateIncomes()
-          console.log(response)
-        }
-      }
-    )
-    this.idIncomeModified = ""
   }
 
   private updateIncomes() {

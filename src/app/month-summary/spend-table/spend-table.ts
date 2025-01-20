@@ -24,6 +24,13 @@ import {MatDialog} from "@angular/material/dialog";
 import {AddSpendComponent} from "../../popup/add-spend/add-spend.component";
 import {NumberFormatterPipe} from "../../pipes/number-formatter.pipe";
 import {DatePickerService} from "../../services/date-picker.service";
+import {
+  MatAccordion, MatExpansionModule,
+  MatExpansionPanel,
+  MatExpansionPanelDescription,
+  MatExpansionPanelTitle
+} from "@angular/material/expansion";
+import {MatIcon} from "@angular/material/icon";
 
 
 @Component({
@@ -49,7 +56,13 @@ import {DatePickerService} from "../../services/date-picker.service";
     MatRow,
     MatRowDef,
     MatButton,
-    NumberFormatterPipe
+    NumberFormatterPipe,
+    MatExpansionModule,
+    MatAccordion,
+    MatExpansionPanel,
+    MatExpansionPanelTitle,
+    MatExpansionPanelDescription,
+    MatIcon
   ],
   templateUrl: './spend-table.html',
   styleUrl: './spend-table.scss'
@@ -57,12 +70,8 @@ import {DatePickerService} from "../../services/date-picker.service";
 export class SpendTable implements OnInit {
 
   spends: Spend[] = []
-  definedColumns = ["Nom", "Montant", "Libellé", "Acheteur", "Bénéficiaires", "Actions"]
   tags: Tag[] = []
   users: User[] = []
-  idSpendModified = ""
-  recipientIds : string[] = []
-  newSpend: Spend = new Spend()
 
   ngOnInit() {
     this.tagService.getAllTags().subscribe({
@@ -78,12 +87,10 @@ export class SpendTable implements OnInit {
     )
     this.datePickerService.spends$.subscribe({
       next: (spends: Spend[]) => {
-        this.spends = spends;
+        this.spends = [...spends].sort((a, b) => a.order - b.order);
       }
     });
   }
-
-
 
   constructor(private spendService: SpendService,
               private tagService: TagService,
@@ -92,17 +99,12 @@ export class SpendTable implements OnInit {
               private datePickerService: DatePickerService) {
   }
 
-  protected readonly FirstLetterPipe = FirstLetterPipe;
   protected readonly first = first;
 
   async onEdit(spend: Spend) {
-    // this.recipientIds = []
-    // spend.recipients.forEach(recipient => {
-    //   this.recipientIds.push(recipient.id);
-    // });
-    // this.idSpendModified = spend.id
-
-    this.addData(spend)
+    console.log("dans le table")
+    console.log(spend)
+    this.openSpendInPopup(spend)
   }
 
   onDelete(spend : Spend){
@@ -111,42 +113,19 @@ export class SpendTable implements OnInit {
     })
   }
 
-  save(spend: Spend) {
-    spend.recipients = this.users.filter(user => this.recipientIds.includes(user.email))
-    this.spendService.saveSpend(spend)
-    this.idSpendModified = ""
-    this.recipientIds = []
-  }
-
-  redo() {
-    this.idSpendModified = ""
-  }
-
-  updateRecipientsSelection(user: User) {
-
-    if (this.recipientIds.includes(user.email)) {
-      this.recipientIds = this.recipientIds.filter(id => id !== user.email);
-    } else {
-      this.recipientIds.push(user.email);
-    }
-  }
-
-  addNewSpend(){
-    this.newSpend.recipients = this.users.filter(user => this.recipientIds.includes(user.email))
-    this.spendService.saveSpend(this.newSpend).subscribe(response => this.updateSpends())
-    this.newSpend = new Spend()
-    this.recipientIds = []
-  }
-
-
   private updateSpends(){
     this.datePickerService.updateSpends()
+  }
+
+  sortedSpends(){
+    this.spends.forEach(spend => console.log(spend.order))
+    return this.spends.sort((a, b) => a.order - b.order)
   }
 
   protected readonly User = User;
 
 
-  addData(spend :Spend|null) {
+  openSpendInPopup(spend :Spend|null) {
     const dialogRef = this.dialog.open(AddSpendComponent,
       {data: {spend:spend}})
 

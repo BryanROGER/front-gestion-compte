@@ -1,17 +1,21 @@
 import {ChangeDetectorRef, Component, OnInit, QueryList, ViewChildren} from '@angular/core';
-import {UserService} from "../services/api-service/user.service";
-import {User} from "../../models/user";
+
 import {RouterLink, RouterLinkActive} from "@angular/router";
 import {first} from "rxjs";
-import {FirstLetterPipe} from "../pipes/first-letter.pipe";
+
 import {NgForOf, NgStyle} from "@angular/common";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {MatIcon} from "@angular/material/icon";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatToolbar} from "@angular/material/toolbar";
 import {CdkConnectedOverlay, CdkOverlayOrigin} from "@angular/cdk/overlay";
-import {Household} from "../../models/household";
-import {HouseholdService} from "../services/api-service/household.service";
+import {FirstLetterPipe} from "../../pipes/first-letter.pipe";
+import {Household} from "../../../models/household";
+import {UserService} from "../../services/api-service/user.service";
+import {HouseholdService} from "../../services/api-service/household.service";
+import {User} from "../../../models/user";
+import {AuthService} from "../../services/auth/auth.service";
+
 
 @Component({
   selector: 'app-header',
@@ -38,37 +42,31 @@ import {HouseholdService} from "../services/api-service/household.service";
 export class HeaderComponent implements OnInit {
 
   household: Household|null = null;
+  user: User|null = null;
 
   ngOnInit() {
-    this.userService.getAllUsers().subscribe({
-      next: (response: any) => {
-        this.users = response.data
-        this.cdr.detectChanges();
-      }
-    })
     this.householdService.household$.subscribe({
       next: (household: Household | null) => {
         this.household = household;
       }
     })
+    const JWT_TOKEN = localStorage.getItem("JWT_TOKEN")
+    let tokenDecode = this.authService.getDecodedToken(JWT_TOKEN!)
+    this.userService.getUserByEmail(tokenDecode.sub).subscribe(
+      {
+        next: (response:any) => {
+          this.user = response.data
+        }
+      }
+    )
   }
 
 
 
-  constructor(private userService: UserService, private cdr: ChangeDetectorRef, private householdService : HouseholdService) {
+  constructor(private userService: UserService, private householdService : HouseholdService,private authService : AuthService) {
   }
 
-  users!: User[];
-  @ViewChildren(MatMenuTrigger) menuTriggers!: QueryList<MatMenuTrigger>;
-  @ViewChildren('menu') menus!: QueryList<any>;
 
-  openMenu(menuTrigger: MatMenuTrigger) {
-    menuTrigger.openMenu();
-  }
-
-  closeMenu(menuTrigger: MatMenuTrigger) {
-    menuTrigger.closeMenu();
-  }
 
   protected readonly first = first;
 }

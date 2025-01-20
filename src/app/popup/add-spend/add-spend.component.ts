@@ -62,36 +62,36 @@ export class AddSpendComponent implements OnInit {
               private dateConverterService: DateConverterService,
               private datePickerService: DatePickerService,
               @Inject(MAT_DIALOG_DATA) public data: { spend: Spend | null }) {
+
     this.newSpend = data.spend ?? new Spend()
     this.textButton = this.newSpend.id ? "Mettre à jour dépense" : "Ajouter nouvelle dépense"
-    if (this.newSpend.recipients){
-      this.newSpend.recipients.forEach(user =>{
+    this.textTitle = this.newSpend.id ? "Modifier dépense" : "Ajouter dépense"
+    if (this.newSpend.recipients) {
+      this.newSpend.recipients.forEach(user => {
         this.defaultRecipients.push(user.email)
       })
     }
-    console.log(this.defaultRecipients)
     this.initializeForm()
 
   }
 
-  users : User[] = []
-  tags : Tag[] = []
-  textButton : string;
+  users: User[] = []
+  tags: Tag[] = []
+  textButton: string;
+  textTitle: string;
   newSpend = new Spend()
-  formAddSpend!:FormGroup;
+  formAddSpend!: FormGroup;
   defaultRecipients: string[] = [];
-
-
 
 
   onFormSubmit() {
     console.log(this.formAddSpend.value)
 
-    if(this.formAddSpend.valid){
+    if (this.formAddSpend.valid) {
 
-      let payerFind = this.users.find(u=> u.email === this.formAddSpend.getRawValue().payerId) || new User()
-      let tagFound = this.tags.find(t=> t.id === this.formAddSpend.getRawValue().tagId) || new Tag()
-      let recipientsFound = this.users.filter(u=> this.formAddSpend.getRawValue().recipientsIds.includes(u.email))
+      let payerFind = this.users.find(u => u.email === this.formAddSpend.getRawValue().payerId) || new User()
+      let tagFound = this.tags.find(t => t.id === this.formAddSpend.getRawValue().tagId) || new Tag()
+      let recipientsFound = this.users.filter(u => this.formAddSpend.getRawValue().recipientsIds.includes(u.email))
 
       this.newSpend.name = this.formAddSpend.value.name!
       this.newSpend.amount = this.formAddSpend.value.amount!
@@ -101,21 +101,33 @@ export class AddSpendComponent implements OnInit {
       this.newSpend.date = this.dateConverterService.getDateForSave(this.datePickerService.selectedMonth, this.datePickerService.selectedYear)
     }
 
-    this.spendService.saveSpend(this.newSpend).subscribe({
+    if (this.newSpend.id) {
+      this.spendService.saveSpend(this.newSpend, this.newSpend.id).subscribe({
+        next: (res) => {
+          console.log(res)
+          this.dialogRef.close()
+        }
+      })
+      return
+    }
+
+
+    this.spendService.createSpend(this.newSpend).subscribe({
       next: (res) => {
         console.log(res)
         this.dialogRef.close()
       }
     })
+
   }
 
   private initializeForm() {
     this.formAddSpend = this.formBuilder.group({
       name: [this.newSpend.name],
       amount: [this.newSpend.amount],
-      payerId : [this.newSpend.payer ?  this.newSpend.payer.email : ""],
-      recipientsIds : [this.defaultRecipients],
-      tagId : [this.newSpend.tag ? this.newSpend.tag.id : "" ]
+      payerId: [this.newSpend.payer ? this.newSpend.payer.email : ""],
+      recipientsIds: [this.defaultRecipients],
+      tagId: [this.newSpend.tag ? this.newSpend.tag.id : ""]
     })
   }
 }

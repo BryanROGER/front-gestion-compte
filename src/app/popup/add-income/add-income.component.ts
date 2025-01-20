@@ -64,6 +64,7 @@ export class AddIncomeComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) public data: { income: Income | null }) {
 
     this.newIncome = data.income ?? new Income()
+    this.textTitle = this.newIncome.id ? "Modifier dépense" : "Ajouter dépense"
     this.textButton = this.newIncome.id ? "Mettre à jour revenu" : "Ajouter nouveau revenu"
     this.initializeForm()
   }
@@ -72,12 +73,14 @@ export class AddIncomeComponent implements OnInit {
   tags: Tag[] = []
   newIncome;
   formAddIncome!: FormGroup;
-  textButton :string;
+  textButton: string;
+  textTitle: string;
+
 
   initializeForm() {
     this.formAddIncome = this.formBuilder.group({
       amount: [this.newIncome.amount, [Validators.required, Validators.min(0)]],
-      userId: [this.newIncome.user ? this.newIncome.user.email: '', Validators.required], // Utiliser l'ID pour lier
+      userId: [this.newIncome.user ? this.newIncome.user.email : '', Validators.required], // Utiliser l'ID pour lier
       tagId: [this.newIncome.tag ? this.newIncome.tag.id : '', Validators.required],    // Utiliser l'ID pour lier
       date: [this.newIncome.date]
     });
@@ -101,7 +104,17 @@ export class AddIncomeComponent implements OnInit {
 
     console.log(this.newIncome)
 
-    this.incomeService.saveIncome(this.newIncome).subscribe({
+    if (this.newIncome.id) {
+      this.incomeService.updateIncome(this.newIncome, this.newIncome.id).subscribe({
+        next: (res) => {
+          console.log(res)
+          this.dialogRef.close()
+        }
+      })
+      return
+    }
+
+    this.incomeService.createIncome(this.newIncome).subscribe({
       next: (res) => {
         console.log(res)
         this.dialogRef.close()

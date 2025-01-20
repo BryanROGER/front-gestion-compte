@@ -10,4 +10,5 @@ export class Spend{
   payer : User = new User();
   recipients : User[] = [];
   tag : Tag = new Tag();
+  order: number=0;
 }

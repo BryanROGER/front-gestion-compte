@@ -13,14 +13,20 @@ export class SpendService {
 
   constructor(private http: HttpClient, private householdService: HouseholdService) { }
 
-  saveSpend(spend: Spend){
+  saveSpend(spend: Spend, id : string){
     const body = JSON.stringify(spend)
     const headers = new HttpHeaders({'Content-Type': 'application/json'});
-    return this.http.put(this.apiURL+"api/v1/spends/add",body, { headers: headers })
+    return this.http.put(this.apiURL+`api/v1/spends/${id}`,body, { headers: headers })
+  }
+
+  createSpend(spend: Spend){
+    const body = JSON.stringify(spend)
+    const headers = new HttpHeaders({'Content-Type': 'application/json'});
+    return this.http.post(this.apiURL+`api/v1/spends`,body, { headers: headers })
   }
 
   deleteSpend(id: string){
-    return this.http.delete(this.apiURL+`api/v1/spends/delete/${id}`)
+    return this.http.delete(this.apiURL+`api/v1/spends/${id}`)
   }
 
   getSpendInMonth(month: string, year: string){

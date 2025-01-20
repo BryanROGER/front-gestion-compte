@@ -1,0 +1,29 @@
+<mat-toolbar color="primary" class="gc-toolbar-header">
+  <div class="gc-toolbar-left" [routerLink]="['/']" style="display : flex; flex-direction: column;">
+    <span >Gestion</span>
+    <span >Compte</span>
+  </div>
+
+
+  @if (household) {
+    <div class="gc-header-house" [routerLink]="['foyer/parametre/:name', {name: household.name}]">
+      <mat-icon>home</mat-icon>
+      <p>{{ household.name }}</p>
+    </div>
+  } @else {
+    <div></div>
+  }
+
+  <div>
+
+    <div class="gc-circle-user"
+         [ngStyle]="{'background-color' : user?.backgroundColor, 'color': user?.letterColor, 'border-color': user?.letterColor}">
+      {{ user?.firstname ?? "" | firstLetter }}
+    </div>
+  </div>
+  <!--        <i class="fa-solid fa-house"  ></i>-->
+
+
+</mat-toolbar>
+
+
