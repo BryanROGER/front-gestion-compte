@@ -9,18 +9,19 @@ export class HouseholdService {
 
   constructor() { }
 
-
-  private householdSubject = new BehaviorSubject<Household | null>(null);
+  private householdSubject = new BehaviorSubject<Household >(new Household());
   household$ = this.householdSubject.asObservable();
+  activeHousehold : Household = new Household();
 
-  setHousehold(household: Household|null) {
+  setHousehold(household: Household) {
+    this.activeHousehold = household;
     this.householdSubject.next(household);
   }
 
   getHousehold(): Observable<Household> {
     return this.household$.pipe(
       map(household => {
-        if (household) {
+        if (household.id) {
           return household;
         } else {
           // Si le household est null, retourner une valeur par défaut ou lever une exception

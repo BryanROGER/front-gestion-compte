@@ -1,0 +1,37 @@
+<h1>Gestion des libellés</h1>
+
+@if (tags) {
+
+  <table mat-table [dataSource]="dataSource"  class="mat-elevation-z8">
+
+    <ng-container matColumnDef="Nom libellé">
+      <th mat-header-cell *matHeaderCellDef> Nom libellé </th>
+      <td mat-cell *matCellDef="let tag"> {{tag.label}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Dépense">
+      <th mat-header-cell *matHeaderCellDef> Dépense </th>
+      <td mat-cell *matCellDef="let tag">
+        <mat-slide-toggle
+          class="example-margin"
+          [checked]="tag.spend">
+        </mat-slide-toggle>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Revenu">
+      <th mat-header-cell *matHeaderCellDef> Revenu </th>
+      <td mat-cell *matCellDef="let tag">
+        <mat-slide-toggle
+          class="example-margin"
+          [checked]="tag.income">
+        </mat-slide-toggle>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+
+}

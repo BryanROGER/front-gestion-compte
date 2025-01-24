@@ -38,3 +38,5 @@ export class SpendService {
     return this.http.post(this.apiURL+"api/v1/spends/all-in-a-month", body);
   }
 }
+
+

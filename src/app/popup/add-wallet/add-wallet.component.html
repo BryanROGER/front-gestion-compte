@@ -1,0 +1,75 @@
+<h1>Texte à changer</h1>
+
+
+<p>Date de début</p>
+<form [formGroup]="startDatePickerForm" class="gc-date-picker-form">
+
+  <mat-form-field>
+    <mat-label>Mois</mat-label>
+    <mat-select formControlName="month">
+      @for (month of months; track month) {
+        <mat-option [value]="month">{{ month }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Année</mat-label>
+    <mat-select formControlName="year">
+      @for (year of years; track year) {
+        <mat-option [value]="year">{{ year }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+</form>
+
+<p>Date de fin</p>
+
+<form [formGroup]="endDatePickerForm" class="gc-date-picker-form">
+
+  <mat-form-field>
+    <mat-label>Mois</mat-label>
+    <mat-select formControlName="month">
+      @for (month of months; track month) {
+        <mat-option [value]="month">{{ month }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Année</mat-label>
+    <mat-select formControlName="year">
+      @for (year of years; track year) {
+        <mat-option [value]="year">{{ year }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+</form>
+
+<form [formGroup]="walletForm" (ngSubmit)="onSubmit()">
+
+  <div formArrayName="budgets">
+    @for (budget of budgets.controls; track budget; let index = $index) {
+    <p>Budget n°{{index+1}}</p>
+
+      <div [formGroupName]="index" class="gc-date-picker-form">
+        <mat-form-field>
+          <mat-label>Libellé</mat-label>
+          <mat-select formControlName="tagId">
+            @for (tag of tags; track tag) {
+              <mat-option [value]="tag.id">{{ tag.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Montant</mat-label>
+          <input matInput formControlName="amount">
+        </mat-form-field>
+      </div>
+    }
+    <button type="button" (click)="addBudget()" class="btn btn-secondary">Add Budget</button>
+  </div>
+
+  <button type="submit" class="btn btn-primary mt-3">Submit</button>
+</form>

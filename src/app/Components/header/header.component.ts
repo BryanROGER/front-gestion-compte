@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit, QueryList, ViewChildren} from '@angular/core';
+import {ChangeDetectorRef, Component, inject, OnInit, QueryList, ViewChildren} from '@angular/core';
 
 import {RouterLink, RouterLinkActive} from "@angular/router";
 import {first} from "rxjs";
@@ -21,32 +21,27 @@ import {AuthService} from "../../services/auth/auth.service";
   selector: 'app-header',
   standalone: true,
   imports: [
-    RouterLinkActive,
     RouterLink,
     FirstLetterPipe,
-    NgForOf,
     NgStyle,
-    MatMenu,
     MatIcon,
-    MatMenuItem,
-    MatMenuTrigger,
-    MatIconButton,
     MatToolbar,
-    MatButton,
-    CdkConnectedOverlay,
-    CdkOverlayOrigin
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent implements OnInit {
 
-  household: Household|null = null;
-  user: User|null = null;
+  userService = inject(UserService);
+  householdService = inject(HouseholdService);
+  authService = inject(AuthService);
+
+  household: Household = new Household();
+  user: User | null = null;
 
   ngOnInit() {
     this.householdService.household$.subscribe({
-      next: (household: Household | null) => {
+      next: (household: Household) => {
         this.household = household;
       }
     })
@@ -54,19 +49,12 @@ export class HeaderComponent implements OnInit {
     let tokenDecode = this.authService.getDecodedToken(JWT_TOKEN!)
     this.userService.getUserByEmail(tokenDecode.sub).subscribe(
       {
-        next: (response:any) => {
+        next: (response: any) => {
           this.user = response.data
         }
       }
     )
   }
-
-
-
-  constructor(private userService: UserService, private householdService : HouseholdService,private authService : AuthService) {
-  }
-
-
 
   protected readonly first = first;
 }

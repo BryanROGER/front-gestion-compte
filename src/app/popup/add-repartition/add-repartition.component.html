@@ -1,0 +1,36 @@
+<h1>Texte à changer</h1>
+
+<form [formGroup]="startDatePickerForm" class="gc-date-picker-form">
+
+  <mat-form-field>
+    <mat-label>Mois</mat-label>
+    <mat-select formControlName="month">
+      @for (month of months; track month) {
+        <mat-option [value]="month">{{ month }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Année</mat-label>
+    <mat-select formControlName="year">
+      @for (year of years; track year) {
+        <mat-option [value]="year">{{ year }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+
+<mat-slider
+  [min]="0"
+  [max]="100"
+  thumbLabel
+  class="custom-slider">
+  <input matSliderThumb #slider>
+
+</mat-slider>
+
+<!--  TODO -->
+
+  <button mat-button>Texte du bouton</button>
+</form>

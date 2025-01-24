@@ -1,0 +1,36 @@
+mat-panel-description {
+  display: flex;
+  justify-content: space-around;
+  margin-right: 2vh;
+}
+
+.gc-expansion-panel-description {
+  display: flex;
+  justify-content: space-around;
+}
+
+.gc-expansion-actions{
+  display: flex;
+  gap: 2vh;
+}
+
+.mat-mdc-slider.mdc-slider--disabled{
+  opacity: 0.7;
+}
+
+.mat-mdc-slider.mdc-slider--disabled .mat-mdc-slider-track{
+  color: #c81589 !important;
+  border-color: #8d0097 !important;
+  background: #570c63 !important;
+}
+
+
+.mdc-slider--disabled {
+  --mdc-slider-disabled-handle-color: #9924c6 !important;
+  --mdc-slider-disabled-inactive-track-color: #ff0000 !important;
+
+  .mdc-slider__track--inactive {
+    opacity: 1 !important;
+  }
+}
+

@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, inject, Inject, OnInit} from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
@@ -19,6 +19,8 @@ import {MatButton} from "@angular/material/button";
 import {IncomeService} from "../../services/api-service/income.service";
 import {DatePickerService} from "../../services/date-picker.service";
 import {DateConverterService} from "../../services/date-converter.service";
+import {MatDatepicker} from "@angular/material/datepicker";
+import {Spend} from "../../../models/Spend";
 
 @Component({
   selector: 'app-add-income',
@@ -49,37 +51,39 @@ export class AddIncomeComponent implements OnInit {
     )
     this.tagService.getAllTags().subscribe({
       next: (response: any) => {
-        this.tags = response.data
-      }
+        var allTags = response.data;
+        if (allTags instanceof Array) {
+          this.tags = allTags.filter(tag => tag.income === true);
+        }      }
     })
-  }
 
-  constructor(private userService: UserService,
-              private tagService: TagService,
-              private incomeService: IncomeService,
-              public dialogRef: MatDialogRef<AddIncomeComponent>,
-              private formBuilder: FormBuilder,
-              private datePickerService: DatePickerService,
-              private dateConverterService: DateConverterService,
-              @Inject(MAT_DIALOG_DATA) public data: { income: Income | null }) {
-
-    this.newIncome = data.income ?? new Income()
+    this.newIncome = this.data.income ?? new Income()
     this.textTitle = this.newIncome.id ? "Modifier dépense" : "Ajouter dépense"
     this.textButton = this.newIncome.id ? "Mettre à jour revenu" : "Ajouter nouveau revenu"
     this.initializeForm()
   }
 
+  userService = inject(UserService);
+  tagService = inject(TagService);
+  incomeService = inject(IncomeService);
+  dialogRef = inject(MatDialogRef<AddIncomeComponent>);
+  formBuilder = inject(FormBuilder);
+  datePickerService = inject(DatePickerService);
+  dateConverterService = inject(DateConverterService);
+  public data = inject(MAT_DIALOG_DATA) as { income: Income | null };
+
+
   users: User[] = []
   tags: Tag[] = []
-  newIncome;
+  newIncome!: Income;
   formAddIncome!: FormGroup;
-  textButton: string;
-  textTitle: string;
+  textButton!: string;
+  textTitle!: string;
 
 
   initializeForm() {
     this.formAddIncome = this.formBuilder.group({
-      amount: [this.newIncome.amount, [Validators.required, Validators.min(0)]],
+      amount: [this.newIncome.amount != 0 ? this.newIncome.amount : "", [Validators.required, Validators.min(0)]],
       userId: [this.newIncome.user ? this.newIncome.user.email : '', Validators.required], // Utiliser l'ID pour lier
       tagId: [this.newIncome.tag ? this.newIncome.tag.id : '', Validators.required],    // Utiliser l'ID pour lier
       date: [this.newIncome.date]

@@ -1,5 +1,5 @@
 <mat-accordion>
-  @for (spend of spends; track spends; ) {
+  @for (spend of spends(); track spend; ) {
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title> {{ spend.name }}</mat-panel-title>

@@ -1,0 +1,54 @@
+<h1>Répartitions</h1>
+
+@for (repartition of repartitions; track repartition.id) {
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-description>
+          <div>
+            <div class="gc-circle-user"
+                 [ngStyle]="{'background-color' : repartition.user1.backgroundColor, 'color': repartition.user1.letterColor, 'border-color': repartition.user1.letterColor}">
+              {{ repartition.user1.firstname | firstLetter }}
+            </div>
+          </div>
+          <div>
+            {{ repartition.partUser1 }} %
+          </div>
+          <mat-slider
+            [min]="0"
+            [max]="100"
+            [disabled]="true"
+            thumbLabel
+            class="custom-slider">
+            <input matSliderThumb [value]="repartition.partUser1" #slider>
+
+          </mat-slider>
+          <div>
+            {{ repartition.partUser2 }} %
+          </div>
+          <div>
+            <div class="gc-circle-user"
+                 [ngStyle]="{'background-color' : repartition.user2.backgroundColor, 'color': repartition.user2.letterColor, 'border-color': repartition.user2.letterColor}">
+              {{ repartition.user2.firstname | firstLetter }}
+            </div>
+          </div>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="gc-expansion-panel-description">
+
+        @if (repartition.active) {
+          <div>depuis le {{repartition.startDate}}</div>
+          <div class="gc-expansion-actions">
+            <mat-icon (click)="onEdit(repartition)">edit</mat-icon>
+          </div>
+        } @else {
+          <div>
+            du {{ repartition.startDate }} au {{ repartition.endDate }}
+          </div>
+          <div></div>
+        }
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+}

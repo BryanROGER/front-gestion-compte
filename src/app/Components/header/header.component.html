@@ -5,8 +5,8 @@
   </div>
 
 
-  @if (household) {
-    <div class="gc-header-house" [routerLink]="['foyer/parametre/:name', {name: household.name}]">
+  @if (household.id != "") {
+    <div class="gc-header-house" [routerLink]="['foyer/:name/parametres', {name: household.name}]">
       <mat-icon>home</mat-icon>
       <p>{{ household.name }}</p>
     </div>

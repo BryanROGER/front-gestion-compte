@@ -1,5 +1,6 @@
 import {User} from "./user";
 import {Tag} from "./Tag";
+import {Household} from "./household";
 
 export class Spend{
 
@@ -11,4 +12,5 @@ export class Spend{
   recipients : User[] = [];
   tag : Tag = new Tag();
   order: number=0;
+  household : Household = new Household();
 }

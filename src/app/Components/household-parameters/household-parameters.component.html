@@ -1,1 +1,44 @@
-<p>household-parameters works!</p>
+@if (household) {
+
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Gérer les libellés</mat-card-title>
+    </mat-card-header>
+    <mat-card-actions>
+      <button mat-button [routerLink]="['/foyer', household.name, 'parametres', 'mes-libelles']">Entrer</button>
+    </mat-card-actions>
+  </mat-card>
+
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Gérer répartition des dépenses communes</mat-card-title>
+    </mat-card-header>
+    <mat-card-actions>
+      <button mat-button [routerLink]="['/foyer', household.name, 'parametres', 'mes-repartitions']">Entrer
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Gérer les écarts de dépenses commune</mat-card-title>
+    </mat-card-header>
+    <mat-card-actions>
+      <button mat-button [routerLink]="['/foyer', household.name, 'parametres', 'ma-balance']">Entrer</button>
+    </mat-card-actions>
+  </mat-card>
+
+  @for (user of users; track user.email) {
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>Gérer le portefeuille de {{ user.firstname }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-actions>
+        <button mat-button
+          [routerLink]="['/foyer', household.name, 'parametres', 'mon-portefeuille',user.firstname]">
+          Entrer
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  }
+}

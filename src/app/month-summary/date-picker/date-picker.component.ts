@@ -1,24 +1,18 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {MatButton} from "@angular/material/button";
-import {MatDialogActions, MatDialogContent} from "@angular/material/dialog";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
-import {MatInput} from "@angular/material/input";
 import {MatOption} from "@angular/material/autocomplete";
 import {MatSelect} from "@angular/material/select";
 import {DatePickerService} from "../../services/date-picker.service";
 import {DateConverterService} from "../../services/date-converter.service";
+import {months, years} from "../../enums/variable-enum";
 
 @Component({
   selector: 'app-date-picker',
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    MatButton,
-    MatDialogActions,
-    MatDialogContent,
     MatFormField,
-    MatInput,
     MatLabel,
     MatOption,
     MatSelect
@@ -42,36 +36,13 @@ export class DatePickerComponent implements OnInit {
     });
   }
 
-  constructor(private formBuilder: FormBuilder, private dateConverterService: DateConverterService, private datePickerService : DatePickerService) {
-  }
+  formBuilder = inject(FormBuilder)
+  dateConverterService = inject(DateConverterService)
+  datePickerService = inject(DatePickerService)
+
+
 
   datePickerForm!: FormGroup;
-
-  months = [
-    "Janvier",
-    "Février",
-    "Mars",
-    "Avril",
-    "Mai",
-    "Juin",
-    "Juillet",
-    "Août",
-    "Septembre",
-    "Octobre",
-    "Novembre",
-    "Décembre"
-  ];
-
-  years = [
-    "2024",
-    "2025",
-    "2026",
-    "2027",
-    "2028",
-    "2029",
-    "2030"
-  ];
-
   currentMonth!: string;
   currentYear!: string;
 
@@ -83,5 +54,6 @@ export class DatePickerComponent implements OnInit {
   }
 
 
-
+  protected readonly years = years;
+  protected readonly months = months;
 }

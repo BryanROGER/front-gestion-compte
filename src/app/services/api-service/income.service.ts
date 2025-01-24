@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {environment} from "../../../environments/environment.development";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Income} from "../../../models/Income";
@@ -8,7 +8,7 @@ import {Income} from "../../../models/Income";
 })
 export class IncomeService {
 
-  constructor(private http: HttpClient) { }
+  http = inject(HttpClient)
 
   apiURL = environment.apiURL
 

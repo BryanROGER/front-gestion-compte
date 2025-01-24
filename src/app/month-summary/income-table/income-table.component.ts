@@ -1,4 +1,4 @@
-import {Component, computed, OnInit} from '@angular/core';
+import {Component, computed, inject, OnInit, Signal} from '@angular/core';
 import {IncomeService} from "../../services/api-service/income.service";
 import {Income} from "../../../models/Income";
 import {NgStyle} from "@angular/common";
@@ -37,20 +37,9 @@ import {MatIcon} from "@angular/material/icon";
   imports: [
     NgStyle,
     FirstLetterPipe,
-    MatTable,
-    MatColumnDef,
-    MatHeaderCell,
-    MatCell,
-    MatHeaderCellDef,
-    MatCellDef,
-    MatHeaderRow,
-    MatHeaderRowDef,
-    MatRow,
-    MatRowDef,
     ReactiveFormsModule,
     FormsModule,
     MatButton,
-    NumberFormatterPipe,
     MatAccordion,
     MatExpansionPanel,
     MatExpansionPanelDescription,
@@ -63,18 +52,16 @@ import {MatIcon} from "@angular/material/icon";
 })
 export class IncomeTableComponent implements OnInit {
 
-  constructor(private incomeService: IncomeService,
-              private userService: UserService,
-              private tagService: TagService,
-              private dialog: MatDialog,
-              private datePickerService: DatePickerService) {
-  }
+  incomeService = inject(IncomeService);
+  userService = inject(UserService);
+  tagService = inject(TagService);
+  dialog = inject(MatDialog);
+  datePickerService = inject(DatePickerService)
 
   ngOnInit() {
-    this.datePickerService.incomes$.subscribe({
-      next: (incomes: Income[]) => {
-        this.incomes = [...incomes].sort((a, b) => a.order - b.order)
-      }
+    this.incomes = computed(() => {
+      const spends = this.datePickerService.getIncomes()();
+      return [...spends].sort((a, b) => a.order - b.order);
     });
     this.userService.getAllUsers().subscribe({
         next: (response: any) => {
@@ -89,7 +76,7 @@ export class IncomeTableComponent implements OnInit {
     })
   }
 
-  incomes: Income[] = []
+  incomes!: Signal<Income[]>
   users: User[] = []
   tags: Tag[] = []
 

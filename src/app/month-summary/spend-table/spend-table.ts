@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, computed, inject, OnInit, Signal} from '@angular/core';
 import {SpendService} from "../../services/api-service/spend.service";
 import {Spend} from "../../../models/Spend";
 import {FirstLetterPipe} from "../../pipes/first-letter.pipe";
@@ -34,29 +34,14 @@ import {MatIcon} from "@angular/material/icon";
 
 
 @Component({
-  selector: 'app-tableau-recap-mois',
+  selector: 'app-spend-table',
   standalone: true,
   imports: [
     FirstLetterPipe,
-    RouterLink,
-    NgForOf,
     FormsModule,
-    NgIf,
     ReactiveFormsModule,
     NgStyle,
-    MatTextColumn,
-    MatTable,
-    MatColumnDef,
-    MatHeaderCell,
-    MatHeaderCellDef,
-    MatCellDef,
-    MatCell,
-    MatHeaderRow,
-    MatHeaderRowDef,
-    MatRow,
-    MatRowDef,
     MatButton,
-    NumberFormatterPipe,
     MatExpansionModule,
     MatAccordion,
     MatExpansionPanel,
@@ -67,11 +52,11 @@ import {MatIcon} from "@angular/material/icon";
   templateUrl: './spend-table.html',
   styleUrl: './spend-table.scss'
 })
+
+
 export class SpendTable implements OnInit {
 
-  spends: Spend[] = []
-  tags: Tag[] = []
-  users: User[] = []
+
 
   ngOnInit() {
     this.tagService.getAllTags().subscribe({
@@ -85,19 +70,22 @@ export class SpendTable implements OnInit {
         }
       }
     )
-    this.datePickerService.spends$.subscribe({
-      next: (spends: Spend[]) => {
-        this.spends = [...spends].sort((a, b) => a.order - b.order);
-      }
+    this.spends = computed(() => {
+      const spends = this.datePickerService.getSpends()();
+      return [...spends].sort((a, b) => a.order - b.order);
     });
   }
 
-  constructor(private spendService: SpendService,
-              private tagService: TagService,
-              private userService: UserService,
-              private dialog: MatDialog,
-              private datePickerService: DatePickerService) {
-  }
+
+  spendService = inject(SpendService);
+  tagService = inject(TagService);
+  userService = inject(UserService);
+  datePickerService = inject(DatePickerService);
+  dialog = inject(MatDialog);
+
+  spends!: Signal<Spend[]>
+  tags: Tag[] = []
+  users: User[] = []
 
   protected readonly first = first;
 
@@ -115,11 +103,6 @@ export class SpendTable implements OnInit {
 
   private updateSpends(){
     this.datePickerService.updateSpends()
-  }
-
-  sortedSpends(){
-    this.spends.forEach(spend => console.log(spend.order))
-    return this.spends.sort((a, b) => a.order - b.order)
   }
 
   protected readonly User = User;

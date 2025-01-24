@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, inject, Inject, OnInit} from '@angular/core';
 import {UserService} from "../../services/api-service/user.service";
 import {TagService} from "../../services/api-service/tag.service";
 import {
@@ -20,6 +20,7 @@ import {MatOption} from "@angular/material/autocomplete";
 import {MatSelect} from "@angular/material/select";
 import {DateConverterService} from "../../services/date-converter.service";
 import {DatePickerService} from "../../services/date-picker.service";
+import {HouseholdService} from "../../services/api-service/household.service";
 
 @Component({
   selector: 'app-add-spend',
@@ -49,21 +50,14 @@ export class AddSpendComponent implements OnInit {
     )
     this.tagService.getAllTags().subscribe({
       next: (response: any) => {
-        this.tags = response.data
+        const allTags = response.data
+        if (allTags instanceof Array) {
+          this.tags = allTags.filter(tag => tag.spend === true);
+        }
       }
     })
-  }
 
-  constructor(private userService: UserService,
-              private tagService: TagService,
-              private spendService: SpendService,
-              public dialogRef: MatDialogRef<AddSpendComponent>,
-              private formBuilder: FormBuilder,
-              private dateConverterService: DateConverterService,
-              private datePickerService: DatePickerService,
-              @Inject(MAT_DIALOG_DATA) public data: { spend: Spend | null }) {
-
-    this.newSpend = data.spend ?? new Spend()
+    this.newSpend = this.data.spend ?? new Spend()
     this.textButton = this.newSpend.id ? "Mettre à jour dépense" : "Ajouter nouvelle dépense"
     this.textTitle = this.newSpend.id ? "Modifier dépense" : "Ajouter dépense"
     if (this.newSpend.recipients) {
@@ -72,13 +66,22 @@ export class AddSpendComponent implements OnInit {
       })
     }
     this.initializeForm()
-
   }
+
+  householdService = inject(HouseholdService);
+  private userService = inject(UserService);
+  private tagService = inject(TagService);
+  private spendService = inject(SpendService);
+  public dialogRef = inject(MatDialogRef<AddSpendComponent>);
+  private formBuilder = inject(FormBuilder);
+  private dateConverterService = inject(DateConverterService);
+  private datePickerService = inject(DatePickerService);
+  public data = inject(MAT_DIALOG_DATA) as { spend: Spend | null };
 
   users: User[] = []
   tags: Tag[] = []
-  textButton: string;
-  textTitle: string;
+  textButton!: string;
+  textTitle!: string;
   newSpend = new Spend()
   formAddSpend!: FormGroup;
   defaultRecipients: string[] = [];
@@ -88,7 +91,6 @@ export class AddSpendComponent implements OnInit {
     console.log(this.formAddSpend.value)
 
     if (this.formAddSpend.valid) {
-
       let payerFind = this.users.find(u => u.email === this.formAddSpend.getRawValue().payerId) || new User()
       let tagFound = this.tags.find(t => t.id === this.formAddSpend.getRawValue().tagId) || new Tag()
       let recipientsFound = this.users.filter(u => this.formAddSpend.getRawValue().recipientsIds.includes(u.email))
@@ -98,6 +100,7 @@ export class AddSpendComponent implements OnInit {
       this.newSpend.tag = tagFound
       this.newSpend.payer = payerFind
       this.newSpend.recipients = recipientsFound
+      this.newSpend.household = this.householdService.activeHousehold
       this.newSpend.date = this.dateConverterService.getDateForSave(this.datePickerService.selectedMonth, this.datePickerService.selectedYear)
     }
 
@@ -124,7 +127,7 @@ export class AddSpendComponent implements OnInit {
   private initializeForm() {
     this.formAddSpend = this.formBuilder.group({
       name: [this.newSpend.name],
-      amount: [this.newSpend.amount],
+      amount: [this.newSpend.amount != 0 ? this.newSpend.amount : "",],
       payerId: [this.newSpend.payer ? this.newSpend.payer.email : ""],
       recipientsIds: [this.defaultRecipients],
       tagId: [this.newSpend.tag ? this.newSpend.tag.id : ""]

@@ -17,7 +17,6 @@ import {Household} from "../../../models/household";
     MatCardActions,
     MatButton,
     MatCardModule,
-    RouterLink
   ],
   selector: 'app-home',
   standalone: true,
@@ -45,7 +44,7 @@ export class HomeComponent implements OnInit {
         }
     }
     )
-    this.householdService.setHousehold(null)
+    this.householdService.setHousehold(new Household())
 
   }
 
