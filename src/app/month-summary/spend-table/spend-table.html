@@ -8,7 +8,6 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
       <div class="gc-description-panel-expansion">
-
         <div class="gc-first-description">
           <div>
             <p>Libellé</p>
@@ -19,7 +18,9 @@
             <div class="gc-user-in-table">
               @for (user of spend.recipients; track user) {
                 <div class="gc-circle-user"
-                     [ngStyle]="{'background-color' : user.backgroundColor, 'color': user.letterColor, 'border-color': user.letterColor}">
+                     [ngStyle]="{'background-color' : user.backgroundColor,
+                                 'color': user.letterColor,
+                                 'border-color': user.letterColor}">
                   {{ user.firstname | firstLetter }}
                 </div>
               }
@@ -32,7 +33,9 @@
           <div>
             <p>Payeur</p>
             <div class="gc-circle-user"
-                 [ngStyle]="{'background-color' : spend.payer.backgroundColor, 'color': spend.payer.letterColor, 'border-color': spend.payer.letterColor}">
+                 [ngStyle]="{'background-color' : spend.payer.backgroundColor,
+                             'color': spend.payer.letterColor,
+                             'border-color': spend.payer.letterColor}">
               {{ spend.payer.firstname | firstLetter }}
             </div>
           </div>

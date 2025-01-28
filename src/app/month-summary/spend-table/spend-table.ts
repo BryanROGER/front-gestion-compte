@@ -2,27 +2,16 @@ import {Component, computed, inject, OnInit, Signal} from '@angular/core';
 import {SpendService} from "../../services/api-service/spend.service";
 import {Spend} from "../../../models/Spend";
 import {FirstLetterPipe} from "../../pipes/first-letter.pipe";
-import {RouterLink} from "@angular/router";
 import {first} from "rxjs";
-import {NgForOf, NgIf, NgStyle} from "@angular/common";
+import {NgStyle} from "@angular/common";
 import { FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {TagService} from "../../services/api-service/tag.service";
 import {Tag} from "../../../models/Tag";
 import {User} from '../../../models/user';
 import {UserService} from "../../services/api-service/user.service";
-import {
-  MatCell,
-  MatCellDef,
-  MatColumnDef,
-  MatHeaderCell,
-  MatHeaderCellDef, MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef,
-  MatTable,
-  MatTextColumn
-} from "@angular/material/table";
 import {MatButton} from "@angular/material/button";
 import {MatDialog} from "@angular/material/dialog";
 import {AddSpendComponent} from "../../popup/add-spend/add-spend.component";
-import {NumberFormatterPipe} from "../../pipes/number-formatter.pipe";
 import {DatePickerService} from "../../services/date-picker.service";
 import {
   MatAccordion, MatExpansionModule,
@@ -56,9 +45,12 @@ import {MatIcon} from "@angular/material/icon";
 
 export class SpendTable implements OnInit {
 
-
-
   ngOnInit() {
+    this.spends = computed(() => {
+      const spends = this.spendService.getSpends();
+      return [...spends].sort((a, b) => a.order - b.order);
+    });
+
     this.tagService.getAllTags().subscribe({
       next: (response: any) => {
         this.tags = response.data
@@ -70,17 +62,14 @@ export class SpendTable implements OnInit {
         }
       }
     )
-    this.spends = computed(() => {
-      const spends = this.datePickerService.getSpends()();
-      return [...spends].sort((a, b) => a.order - b.order);
-    });
+
   }
 
 
   spendService = inject(SpendService);
+  datePickerService = inject(DatePickerService);
   tagService = inject(TagService);
   userService = inject(UserService);
-  datePickerService = inject(DatePickerService);
   dialog = inject(MatDialog);
 
   spends!: Signal<Spend[]>
@@ -102,7 +91,7 @@ export class SpendTable implements OnInit {
   }
 
   private updateSpends(){
-    this.datePickerService.updateSpends()
+    this.spendService.updateSpends(this.datePickerService.selectedMonth, this.datePickerService.selectedYear)
   }
 
   protected readonly User = User;

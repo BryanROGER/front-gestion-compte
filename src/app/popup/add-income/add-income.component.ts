@@ -109,7 +109,7 @@ export class AddIncomeComponent implements OnInit {
     console.log(this.newIncome)
 
     if (this.newIncome.id) {
-      this.incomeService.updateIncome(this.newIncome, this.newIncome.id).subscribe({
+      this.incomeService.saveIncome(this.newIncome, this.newIncome.id).subscribe({
         next: (res) => {
           console.log(res)
           this.dialogRef.close()

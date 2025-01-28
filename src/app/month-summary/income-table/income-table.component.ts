@@ -60,7 +60,7 @@ export class IncomeTableComponent implements OnInit {
 
   ngOnInit() {
     this.incomes = computed(() => {
-      const spends = this.datePickerService.getIncomes()();
+      const spends = this.incomeService.getIncomes()();
       return [...spends].sort((a, b) => a.order - b.order);
     });
     this.userService.getAllUsers().subscribe({
@@ -93,7 +93,7 @@ export class IncomeTableComponent implements OnInit {
   }
 
   private updateIncomes() {
-    this.datePickerService.updateIncomes()
+    this.incomeService.updateIncomes(this.datePickerService.selectedMonth, this.datePickerService.selectedYear)
   }
 
   addData(income: Income | null) {

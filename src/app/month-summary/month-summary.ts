@@ -16,9 +16,6 @@ import {MatSelect} from "@angular/material/select";
   selector: 'app-recapitulatif-du-mois',
   standalone: true,
   imports: [
-    NgIf,
-    NgForOf,
-    KeyValuePipe,
     SpendTable,
     MatTabGroup,
     MatTab,
@@ -27,10 +24,6 @@ import {MatSelect} from "@angular/material/select";
     MatTabsModule,
     DatePickerComponent,
     FormsModule,
-    MatFormField,
-    MatLabel,
-    MatOption,
-    MatSelect,
     ReactiveFormsModule
   ],
   templateUrl: './month-summary.html',
