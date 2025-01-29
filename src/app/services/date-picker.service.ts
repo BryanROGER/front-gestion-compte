@@ -32,7 +32,7 @@ export class DatePickerService {
 
 
   private loadSpendsOfMonth(month: string, year: string) {
-    this.spendService.getSpendsInMonth(month, year)
+    this.spendService.getSpendsByMonth(month, year)
   }
 
   private loadIncomesOfMonth(month: string, year: string) {

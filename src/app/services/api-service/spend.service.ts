@@ -23,7 +23,7 @@ export class SpendService {
   }
 
   updateSpends(month : string, year : string){
-    this.getSpendsInMonth(month, year)
+    this.getSpendsByMonth(month, year)
   }
 
 
@@ -43,7 +43,7 @@ export class SpendService {
     return this.http.delete(this.apiURL + `api/v1/spends/${id}`)
   }
 
-  getSpendsInMonth(month: string, year: string) {
+  getSpendsByMonth(month: string, year: string) {
     let household
     this.householdService.getHousehold().subscribe(house => {
       household = house
