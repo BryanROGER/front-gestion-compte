@@ -1,4 +1,4 @@
-import {Component, computed, inject, OnInit, Signal} from '@angular/core';
+import {Component, computed, effect, inject, OnInit, signal, Signal} from '@angular/core';
 import {IncomeService} from "../../services/api-service/income.service";
 import {Income} from "../../../models/Income";
 import {NgStyle} from "@angular/common";
@@ -29,6 +29,8 @@ import {
   MatExpansionPanelHeader, MatExpansionPanelTitle
 } from "@angular/material/expansion";
 import {MatIcon} from "@angular/material/icon";
+import {Spend} from "../../../models/Spend";
+import {ResponseApi} from "../../../models/response-api";
 
 
 @Component({
@@ -59,10 +61,6 @@ export class IncomeTableComponent implements OnInit {
   datePickerService = inject(DatePickerService)
 
   ngOnInit() {
-    this.incomes = computed(() => {
-      const spends = this.incomeService.getIncomes()();
-      return [...spends].sort((a, b) => a.order - b.order);
-    });
     this.userService.getAllUsers().subscribe({
         next: (response: any) => {
           this.users = response.data;
@@ -76,9 +74,26 @@ export class IncomeTableComponent implements OnInit {
     })
   }
 
-  incomes!: Signal<Income[]>
+  constructor() {
+    effect(() => {
+      const {month, year} = this.datePickerService.getSelectedDate()();
+      if (month && year) {
+        this.incomeService.getIncomesByMonth(month, year).subscribe({
+          next: (response: ResponseApi) => {
+            this.incomesList.set(response.data);
+          }
+        });
+      }
+    });
+  }
+
+  incomes= computed(() => {
+    return [...this.incomesList()].sort((a, b) => a.order - b.order);
+  });
   users: User[] = []
   tags: Tag[] = []
+  private incomesList = signal<Spend[]>([]);
+
 
 
   onEdit(income: Income) {
@@ -93,7 +108,10 @@ export class IncomeTableComponent implements OnInit {
   }
 
   private updateIncomes() {
-    this.incomeService.updateIncomes(this.datePickerService.selectedMonth, this.datePickerService.selectedYear)
+    this.datePickerService.changeDate(
+      this.datePickerService.getSelectedDate()().month,
+      this.datePickerService.getSelectedDate()().year
+    );
   }
 
   addData(income: Income | null) {

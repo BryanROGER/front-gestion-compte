@@ -15,16 +15,6 @@ export class IncomeService {
 
   apiURL = environment.apiURL
 
-  private incomes = signal<Income[]>([]);
-
-  getIncomes() {
-    return this.incomes.asReadonly();
-  }
-
-  updateIncomes(month : string, year : string){
-    this.getIncomesInMonth(month, year)
-  }
-
 
   saveIncome(income: Income, id :string){
     const body = JSON.stringify(income)
@@ -43,17 +33,13 @@ export class IncomeService {
     return this.http.delete(this.apiURL+`api/v1/incomes/${id}`)
   }
 
-  getIncomesInMonth(month: string, year: string) {
+  getIncomesByMonth(month: string, year: string) {
     let household
     this.householdService.getHousehold().subscribe(house => {
       household = house
     })
     const body = {month: `${month}`, year: `${year}`, householdID: `${household!.id}`};
 
-    this.http.post<ResponseApi>(this.apiURL+"api/v1/incomes/all-in-a-month", body).subscribe({
-      next: (response: ResponseApi) => {
-        this.incomes.set(response.data);
-      }
-    });
+    return this.http.post<ResponseApi>(this.apiURL+"api/v1/incomes/all-in-a-month", body)
   }
 }

@@ -101,7 +101,8 @@ export class AddSpendComponent implements OnInit {
       this.newSpend.payer = payerFind
       this.newSpend.recipients = recipientsFound
       this.newSpend.household = this.householdService.activeHousehold
-      this.newSpend.date = this.dateConverterService.getDateForSave(this.datePickerService.selectedMonth, this.datePickerService.selectedYear)
+      const {month, year} = this.datePickerService.getSelectedDate()();
+      this.newSpend.date = this.dateConverterService.getDateForSave(month, year)
     }
 
     if (this.newSpend.id) {

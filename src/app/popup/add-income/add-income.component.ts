@@ -103,7 +103,8 @@ export class AddIncomeComponent implements OnInit {
       this.newIncome.amount = this.formAddIncome.value.amount
       this.newIncome.user = userFind
       this.newIncome.tag = tagFound
-      this.newIncome.date = this.dateConverterService.getDateForSave(this.datePickerService.selectedMonth, this.datePickerService.selectedYear)
+      const {month, year} = this.datePickerService.getSelectedDate()();
+      this.newIncome.date = this.dateConverterService.getDateForSave(month, year)
     }
 
     console.log(this.newIncome)

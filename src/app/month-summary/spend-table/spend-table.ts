@@ -1,10 +1,9 @@
-import {Component, computed, inject, OnInit, Signal} from '@angular/core';
+import {Component, computed, DestroyRef, effect, inject, OnInit, signal} from '@angular/core';
 import {SpendService} from "../../services/api-service/spend.service";
 import {Spend} from "../../../models/Spend";
 import {FirstLetterPipe} from "../../pipes/first-letter.pipe";
-import {first} from "rxjs";
 import {NgStyle} from "@angular/common";
-import { FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {TagService} from "../../services/api-service/tag.service";
 import {Tag} from "../../../models/Tag";
 import {User} from '../../../models/user';
@@ -20,6 +19,7 @@ import {
   MatExpansionPanelTitle
 } from "@angular/material/expansion";
 import {MatIcon} from "@angular/material/icon";
+import {ResponseApi} from "../../../models/response-api";
 
 
 @Component({
@@ -46,11 +46,6 @@ import {MatIcon} from "@angular/material/icon";
 export class SpendTable implements OnInit {
 
   ngOnInit() {
-    this.spends = computed(() => {
-      const spends = this.spendService.getSpends();
-      return [...spends].sort((a, b) => a.order - b.order);
-    });
-
     this.tagService.getAllTags().subscribe({
       next: (response: any) => {
         this.tags = response.data
@@ -62,46 +57,56 @@ export class SpendTable implements OnInit {
         }
       }
     )
-
   }
 
+  constructor() {
+    effect(() => {
+      const {month, year} = this.datePickerService.getSelectedDate()();
+      if (month && year) {
+        this.spendService.getSpendsByMonth(month, year).subscribe({
+          next: (response: ResponseApi) => {
+            this.spendsList.set(response.data);
+          }
+        });
+      }
+    });
+  }
 
   spendService = inject(SpendService);
   datePickerService = inject(DatePickerService);
   tagService = inject(TagService);
   userService = inject(UserService);
   dialog = inject(MatDialog);
-
-  spends!: Signal<Spend[]>
+  spends = computed(() => {
+    return [...this.spendsList()].sort((a, b) => a.order - b.order);
+  });
   tags: Tag[] = []
   users: User[] = []
+  private spendsList = signal<Spend[]>([]);
 
-  protected readonly first = first;
 
-  async onEdit(spend: Spend) {
-    console.log("dans le table")
-    console.log(spend)
+  onEdit(spend: Spend) {
     this.openSpendInPopup(spend)
   }
 
-  onDelete(spend : Spend){
+  onDelete(spend: Spend) {
     this.spendService.deleteSpend(spend.id.toString()).subscribe(() => {
-        this.updateSpends()
+      this.updateSpends()
     })
   }
 
-  private updateSpends(){
-    this.spendService.updateSpends(this.datePickerService.selectedMonth, this.datePickerService.selectedYear)
+  private updateSpends() {
+    this.datePickerService.changeDate(
+      this.datePickerService.getSelectedDate()().month,
+      this.datePickerService.getSelectedDate()().year
+    );
   }
 
-  protected readonly User = User;
-
-
-  openSpendInPopup(spend :Spend|null) {
+  openSpendInPopup(spend: Spend | null) {
     const dialogRef = this.dialog.open(AddSpendComponent,
-      {data: {spend:spend}})
+      {data: {spend: spend}})
 
-    dialogRef.afterClosed().subscribe(()=>{
+    dialogRef.afterClosed().subscribe(() => {
       this.updateSpends()
     })
   }

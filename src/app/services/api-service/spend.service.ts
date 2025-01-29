@@ -16,15 +16,15 @@ export class SpendService {
   http = inject(HttpClient)
   householdService = inject(HouseholdService);
 
-  private spends = signal<Spend[]>([]);
-
-  getSpends() {
-    return this.spends.asReadonly()();
-  }
-
-  updateSpends(month : string, year : string){
-    this.getSpendsByMonth(month, year)
-  }
+  // private spends = signal<Spend[]>([]);
+  //
+  // getSpends() {
+  //   return this.spends.asReadonly()();
+  // }
+  //
+  // updateSpends(month : string, year : string){
+  //   this.getSpendsByMonth(month, year)
+  // }
 
 
   saveSpend(spend: Spend, id: string) {
@@ -50,11 +50,7 @@ export class SpendService {
     })
     const body = {month: `${month}`, year: `${year}`, householdID: `${household!.id}`};
 
-    this.http.post<ResponseApi>(this.apiURL + "api/v1/spends/all-in-a-month", body).subscribe({
-      next: (response: ResponseApi) => {
-          this.spends.set(response.data);
-      }
-    });
+    return this.http.post<ResponseApi>(this.apiURL + "api/v1/spends/all-in-a-month", body);
   }
 
 
