@@ -30,7 +30,7 @@ export class LoginComponent {
 
   loginForm: FormGroup = new FormGroup({
     username: new FormControl('bryan@gmail.com', [Validators.required]),
-    password: new FormControl('test', [Validators.required]),
+    password: new FormControl('Azertyuiop10&10', [Validators.required]),
   });
 
 

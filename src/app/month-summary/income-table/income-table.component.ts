@@ -92,7 +92,7 @@ export class IncomeTableComponent implements OnInit {
   });
   users: User[] = []
   tags: Tag[] = []
-  private incomesList = signal<Spend[]>([]);
+  private incomesList = signal<Income[]>([]);
 
 
 
