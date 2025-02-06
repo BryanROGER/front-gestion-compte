@@ -14,17 +14,17 @@ import {WalletSettingComponent} from "./Components/household-parameters/wallet-s
 
 
 export const routes: Routes = [
+  {path: "", component:HomeComponent,canActivate : [authGuard]},
+  {path: "foyer/:name", component:MonthSummary,canActivate : [authGuard]},
+  {path: "user/:id", component:ProfileComponent,canActivate : [authGuard]},
+  {path: "mon-profil/:email", component:ProfileComponent,canActivate : [authGuard]},
+  {path: "foyer/:name/parametres", component:HouseholdParametersComponent,canActivate : [authGuard]},
+  {path: "foyer/:name/parametres/mes-libelles", component:TagsSettigsComponent,canActivate : [authGuard]},
+  {path: "foyer/:name/parametres/mes-repartitions", component:repartitionSettingComponent,canActivate : [authGuard]},
+  {path: "foyer/:name/parametres/ma-balance", component:DistributionSettingsComponent,canActivate : [authGuard]},
+  {path: "foyer/:name/parametres/mon-portefeuille/:user", component:WalletSettingComponent,canActivate : [authGuard]},
   {path: "login", component:LoginComponent},
   {path: '**', redirectTo:"/login"},
-  {path: "", component:HomeComponent, canActivate: [authGuard]},
-  {path: "foyer/:name", component:MonthSummary, canActivate: [authGuard]},
-  {path: "user/:id", component:ProfileComponent, canActivate: [authGuard]},
-  {path: "mon-profil/:email", component:ProfileComponent, canActivate: [authGuard]},
-  {path: "foyer/:name/parametres", component:HouseholdParametersComponent, canActivate: [authGuard]},
-  {path: "foyer/:name/parametres/mes-libelles", component:TagsSettigsComponent, canActivate: [authGuard]},
-  {path: "foyer/:name/parametres/mes-repartitions", component:repartitionSettingComponent, canActivate: [authGuard]},
-  {path: "foyer/:name/parametres/ma-balance", component:DistributionSettingsComponent, canActivate: [authGuard]},
-  {path: "foyer/:name/parametres/mon-portefeuille/:user", component:WalletSettingComponent, canActivate: [authGuard]},
 ];
 
 

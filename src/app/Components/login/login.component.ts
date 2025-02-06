@@ -44,13 +44,13 @@ export class LoginComponent {
       password: this.loginForm.get('password')?.value
     }).subscribe({
       next: (response: any) => {
-        // console.log("response ",response)
-        // console.log(response.status)
-        // if (response.status == 403) {
-        //   console.log("login component / mauvais identifiants")
-        //   return
-        // }
-        // this.router.navigate(['/'])
+        console.log("response ",response)
+        console.log(response.status)
+        if (response.status == 403) {
+          console.log("login component / mauvais identifiants")
+          return
+        }
+        this.router.navigate(['/'])
 
       }
     })

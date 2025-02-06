@@ -105,6 +105,7 @@ export class AddIncomeComponent implements OnInit {
       this.newIncome.tag = tagFound
       const {month, year} = this.datePickerService.getSelectedDate()();
       this.newIncome.date = this.dateConverterService.getDateForSave(month, year)
+
     }
 
     console.log(this.newIncome)
